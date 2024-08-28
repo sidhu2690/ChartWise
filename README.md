@@ -1,6 +1,9 @@
 # ChartWise
 This is a simple Flask-based web application that allows users to track stocks and monitor their performance based on various technical indicators, including RSI, moving averages, MACD, and Bollinger Bands.
 
+![image](https://github.com/user-attachments/assets/ae2d0314-8351-4d9f-8796-9a178cf37b41)
+
+
 ## Features
 
 - **Track multiple stocks** by adding the stock symbol and your suggested purchase price.
