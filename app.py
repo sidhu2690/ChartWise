@@ -54,7 +54,7 @@ def get_stock_data():
         suggested_price = stock['suggested_price']
         ticker = yf.Ticker(symbol)
         
-        history = ticker.history(period='1y')  # Fetch 1 year of historical data
+        history = ticker.history(period='6mo')  # Fetch 1 year of historical data
         current_price = history['Close'].iloc[-1] if not history.empty else None
         
         if current_price is not None:
