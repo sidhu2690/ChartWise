@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stock Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            margin: auto;
+            overflow: hidden;
+        }
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        input[type="text"], input[type="number"] {
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #5cb85c;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+            min-width: 150px; /* Ensure columns have a minimum width */
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        a.sort {
+            color: #333;
+            text-decoration: none;
+        }
+        a.sort:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Stock Tracker</h1>
+        <form method="POST">
+            <input type="text" name="symbol" placeholder="Stock Symbol" required>
+            <input type="number" name="suggested_price" placeholder="Suggested Price" step="0.01" required>
+            <button type="submit">Add Stock</button>
+        </form>
+        
+        <h2>Tracked Stocks</h2>
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th><a href="?sort=Stock Symbol&order={{ 'asc' if sort_column != 'Stock Symbol' or sort_order == 'desc' else 'desc' }}" class="sort">Stock Symbol</a></th>
+                    <th><a href="?sort=Suggested Price&order={{ 'asc' if sort_column != 'Suggested Price' or sort_order == 'desc' else 'desc' }}" class="sort">Suggested Price</a></th>
+                    <th><a href="?sort=Current Price&order={{ 'asc' if sort_column != 'Current Price' or sort_order == 'desc' else 'desc' }}" class="sort">Current Price</a></th>
+                    <th><a href="?sort=Gain/Loss (%)&order={{ 'asc' if sort_column != 'Gain/Loss (%)' or sort_order == 'desc' else 'desc' }}" class="sort">Gain/Loss (%)</a></th>
+                    <th><a href="?sort=RSI&order={{ 'asc' if sort_column != 'RSI' or sort_order == 'desc' else 'desc' }}" class="sort">RSI</a></th>
+                    <th><a href="?sort=Short MA&order={{ 'asc' if sort_column != 'Short MA' or sort_order == 'desc' else 'desc' }}" class="sort">Short MA</a></th>
+                    <th><a href="?sort=Long MA&order={{ 'asc' if sort_column != 'Long MA' or sort_order == 'desc' else 'desc' }}" class="sort">Long MA</a></th>
+                    <th><a href="?sort=MACD&order={{ 'asc' if sort_column != 'MACD' or sort_order == 'desc' else 'desc' }}" class="sort">MACD</a></th>
+                    <th><a href="?sort=Signal Line&order={{ 'asc' if sort_column != 'Signal Line' or sort_order == 'desc' else 'desc' }}" class="sort">Signal Line</a></th>
+                    <th><a href="?sort=Upper Bollinger Band&order={{ 'asc' if sort_column != 'Upper Bollinger Band' or sort_order == 'desc' else 'desc' }}" class="sort">Upper Bollinger Band</a></th>
+                    <th><a href="?sort=Lower Bollinger Band&order={{ 'asc' if sort_column != 'Lower Bollinger Band' or sort_order == 'desc' else 'desc' }}" class="sort">Lower Bollinger Band</a></th>
+                </tr>
+                {% for stock in stock_data %}
+                <tr>
+                    <td>{{ stock['Stock Symbol'] }}</td>
+                    <td>{{ stock['Suggested Price'] }}</td>
+                    <td>{{ stock['Current Price'] }}</td>
+                    <td>{{ stock['Gain/Loss (%)'] | round(2) if stock['Gain/Loss (%)'] is not none else 'N/A' }}</td>
+                    <td>{{ stock['RSI'] | round(2) if stock['RSI'] is not none else 'N/A' }}</td>
+                    <td>{{ stock['Short MA'] | round(2) if stock['Short MA'] is not none else 'N/A' }}</td>
+                    <td>{{ stock['Long MA'] | round(2) if stock['Long MA'] is not none else 'N/A' }}</td>
+                    <td>{{ stock['MACD'] | round(2) if stock['MACD'] is not none else 'N/A' }}</td>
+                    <td>{{ stock['Signal Line'] | round(2) if stock['Signal Line'] is not none else 'N/A' }}</td>
+                    <td>{{ stock['Upper Bollinger Band'] | round(2) if stock['Upper Bollinger Band'] is not none else 'N/A' }}</td>
+                    <td>{{ stock['Lower Bollinger Band'] | round(2) if stock['Lower Bollinger Band'] is not none else 'N/A' }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</body>
+</html>
