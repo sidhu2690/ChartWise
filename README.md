@@ -21,39 +21,21 @@ To run this application locally, follow these steps:
     cd ChartWise
     ```
 
-2. **Create a virtual environment:**
 
-    ```bash
-    python3 -m venv venv
-    ```
 
-3. **Activate the virtual environment:**
-
-    - On macOS/Linux:
-
-        ```bash
-        source venv/bin/activate
-        ```
-
-    - On Windows:
-
-        ```bash
-        venv\Scripts\activate
-        ```
-
-4. **Install the required dependencies:**
+2. **Install the required dependencies:**
 
     ```bash
     pip install -r requirements.txt
     ```
 
-5. **Run the application:**
+3. **Run the application:**
 
     ```bash
     python app.py
     ```
 
-6. **Open your web browser** and go to `http://127.0.0.1:5000/` to access the app.
+4. **Open your web browser** and go to `http://127.0.0.1:5000/` to access the app.
 
 ## Usage
 
