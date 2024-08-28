@@ -14,8 +14,8 @@ To run this application locally, follow these steps:
 1. **Clone the repository:**
 
     ```bash
-    git clone https://github.com/yourusername/stock-tracker.git
-    cd stock-tracker
+    git clone https://github.com/sidhu2690/ChartWise.git
+    cd ChartWise
     ```
 
 2. **Create a virtual environment:**
