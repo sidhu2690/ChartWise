@@ -49,12 +49,14 @@ def calculate_bollinger_bands(data, window=20):
 
 def get_stock_data():
     data = []
+    daily_changes = []
+
     for stock in stocks:
         symbol = stock['symbol']
         suggested_price = stock['suggested_price']
         ticker = yf.Ticker(symbol)
         
-        history = ticker.history(period='6mo')  # Fetch 1 year of historical data
+        history = ticker.history(period='6mo')
         current_price = history['Close'].iloc[-1] if not history.empty else None
         
         if current_price is not None:
@@ -64,6 +66,10 @@ def get_stock_data():
             long_ma = calculate_moving_average(history, 50)
             macd, signal_line = calculate_macd(history)
             upper_band, lower_band = calculate_bollinger_bands(history)
+            
+            # Calculate daily change percentage
+            daily_change = ((current_price - history['Close'].iloc[-2]) / history['Close'].iloc[-2]) * 100
+            daily_changes.append((symbol, current_price, daily_change))
         else:
             gain_loss = None
             rsi = None
@@ -88,7 +94,12 @@ def get_stock_data():
             'Lower Bollinger Band': lower_band
         })
     
-    return data
+    # Sort daily changes for top gainers and losers
+    daily_changes_sorted = sorted(daily_changes, key=lambda x: x[2], reverse=True)
+    top_gainers = daily_changes_sorted[:10]
+    top_losers = daily_changes_sorted[-10:]
+    
+    return data, top_gainers, top_losers
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -97,10 +108,10 @@ def index():
         symbol = request.form['symbol']
         suggested_price = float(request.form['suggested_price'])
         stocks.append({'symbol': symbol, 'suggested_price': suggested_price})
-        save_stocks(stocks)  # Save to CSV after adding a new stock
+        save_stocks(stocks)
         return redirect(url_for('index'))
     
-    stock_data = get_stock_data()
+    stock_data, top_gainers, top_losers = get_stock_data()
     
     # Handle sorting
     sort_column = request.args.get('sort', 'Stock Symbol')
@@ -108,7 +119,7 @@ def index():
     reverse = True if sort_order == 'desc' else False
     stock_data = sorted(stock_data, key=lambda x: x.get(sort_column, 0) or 0, reverse=reverse)
     
-    return render_template('index.html', stock_data=stock_data, sort_column=sort_column, sort_order=sort_order)
+    return render_template('index.html', stock_data=stock_data, top_gainers=top_gainers, top_losers=top_losers, sort_column=sort_column, sort_order=sort_order)
 
 if __name__ == '__main__':
     app.run(debug=True)
