@@ -58,6 +58,9 @@ def get_stock_data():
         
         history = ticker.history(period='6mo')
         current_price = history['Close'].iloc[-1] if not history.empty else None
+        volume = history['Volume'].iloc[-1] if not history.empty else None
+        avg_volume = history['Volume'].mean() if not history.empty else None
+        market_cap = ticker.info.get('marketCap', 'N/A')
         
         if current_price is not None:
             gain_loss = ((current_price - suggested_price) / suggested_price) * 100
@@ -91,7 +94,10 @@ def get_stock_data():
             'MACD': macd,
             'Signal Line': signal_line,
             'Upper Bollinger Band': upper_band,
-            'Lower Bollinger Band': lower_band
+            'Lower Bollinger Band': lower_band,
+            'Volume': volume,
+            'Average Volume': avg_volume,
+            'Market Cap': market_cap
         })
     
     # Sort daily changes for top gainers and losers
