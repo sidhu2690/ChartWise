@@ -70,54 +70,54 @@
 </head>
 <body>
     <div class="container">
-        <h1>ChartWise</h1>
-        <form method="POST">
+        <h1>Stock Tracker</h1>
+        <form method="post" action="{{ url_for('index') }}">
             <input type="text" name="symbol" placeholder="Stock Symbol" required>
-            <input type="number" name="suggested_price" placeholder="Suggested Price" step="0.01" required>
+            <input type="number" name="suggested_price" step="0.01" placeholder="Suggested Price" required>
             <button type="submit">Add Stock</button>
         </form>
-        
-        <h2>Tracked Stocks</h2>
+
+        <h2>Stocks</h2>
         <div class="table-container">
             <table>
                 <tr>
-                    <th><a href="?sort=Stock Symbol&order={{ 'asc' if sort_column != 'Stock Symbol' or sort_order == 'desc' else 'desc' }}" class="sort">Stock Symbol</a></th>
-                    <th><a href="?sort=Suggested Price&order={{ 'asc' if sort_column != 'Suggested Price' or sort_order == 'desc' else 'desc' }}" class="sort">Suggested Price</a></th>
-                    <th><a href="?sort=Current Price&order={{ 'asc' if sort_column != 'Current Price' or sort_order == 'desc' else 'desc' }}" class="sort">Current Price</a></th>
-                    <th><a href="?sort=Gain/Loss (%)&order={{ 'asc' if sort_column != 'Gain/Loss (%)' or sort_order == 'desc' else 'desc' }}" class="sort">Gain/Loss (%)</a></th>
-                    <th><a href="?sort=RSI&order={{ 'asc' if sort_column != 'RSI' or sort_order == 'desc' else 'desc' }}" class="sort">RSI</a></th>
-                    <th><a href="?sort=Short MA&order={{ 'asc' if sort_column != 'Short MA' or sort_order == 'desc' else 'desc' }}" class="sort">Short MA</a></th>
-                    <th><a href="?sort=Long MA&order={{ 'asc' if sort_column != 'Long MA' or sort_order == 'desc' else 'desc' }}" class="sort">Long MA</a></th>
-                    <th><a href="?sort=MACD&order={{ 'asc' if sort_column != 'MACD' or sort_order == 'desc' else 'desc' }}" class="sort">MACD</a></th>
-                    <th><a href="?sort=Signal Line&order={{ 'asc' if sort_column != 'Signal Line' or sort_order == 'desc' else 'desc' }}" class="sort">Signal Line</a></th>
-                    <th><a href="?sort=Upper Bollinger Band&order={{ 'asc' if sort_column != 'Upper Bollinger Band' or sort_order == 'desc' else 'desc' }}" class="sort">Upper Bollinger Band</a></th>
-                    <th><a href="?sort=Lower Bollinger Band&order={{ 'asc' if sort_column != 'Lower Bollinger Band' or sort_order == 'desc' else 'desc' }}" class="sort">Lower Bollinger Band</a></th>
-                    <th><a href="?sort=Volume&order={{ 'asc' if sort_column != 'Volume' or sort_order == 'desc' else 'desc' }}" class="sort">Daily Volume</a></th>
-                    <th><a href="?sort=Average Volume&order={{ 'asc' if sort_column != 'Average Volume' or sort_order == 'desc' else 'desc' }}" class="sort">Average Volume</a></th>
-                    <th><a href="?sort=Market Cap&order={{ 'asc' if sort_column != 'Market Cap' or sort_order == 'desc' else 'desc' }}" class="sort">Market Cap</a></th>
+                    <th><a class="sort" href="?sort=Stock Symbol&order={{ 'desc' if sort_column == 'Stock Symbol' and sort_order == 'asc' else 'asc' }}">Stock Symbol</a></th>
+                    <th><a class="sort" href="?sort=Suggested Price&order={{ 'desc' if sort_column == 'Suggested Price' and sort_order == 'asc' else 'asc' }}">Suggested Price</a></th>
+                    <th><a class="sort" href="?sort=Current Price&order={{ 'desc' if sort_column == 'Current Price' and sort_order == 'asc' else 'asc' }}">Current Price</a></th>
+                    <th><a class="sort" href="?sort=Gain/Loss (%)&order={{ 'desc' if sort_column == 'Gain/Loss (%)' and sort_order == 'asc' else 'asc' }}">Gain/Loss (%)</a></th>
+                    <th><a class="sort" href="?sort=RSI&order={{ 'desc' if sort_column == 'RSI' and sort_order == 'asc' else 'asc' }}">RSI</a></th>
+                    <th><a class="sort" href="?sort=Short MA&order={{ 'desc' if sort_column == 'Short MA' and sort_order == 'asc' else 'asc' }}">Short MA</a></th>
+                    <th><a class="sort" href="?sort=Long MA&order={{ 'desc' if sort_column == 'Long MA' and sort_order == 'asc' else 'asc' }}">Long MA</a></th>
+                    <th><a class="sort" href="?sort=MACD&order={{ 'desc' if sort_column == 'MACD' and sort_order == 'asc' else 'asc' }}">MACD</a></th>
+                    <th><a class="sort" href="?sort=Signal Line&order={{ 'desc' if sort_column == 'Signal Line' and sort_order == 'asc' else 'asc' }}">Signal Line</a></th>
+                    <th><a class="sort" href="?sort=Upper Bollinger Band&order={{ 'desc' if sort_column == 'Upper Bollinger Band' and sort_order == 'asc' else 'asc' }}">Upper Bollinger Band</a></th>
+                    <th><a class="sort" href="?sort=Lower Bollinger Band&order={{ 'desc' if sort_column == 'Lower Bollinger Band' and sort_order == 'asc' else 'asc' }}">Lower Bollinger Band</a></th>
+                    <th><a class="sort" href="?sort=Volume&order={{ 'desc' if sort_column == 'Volume' and sort_order == 'asc' else 'asc' }}">Volume</a></th>
+                    <th><a class="sort" href="?sort=Average Volume&order={{ 'desc' if sort_column == 'Average Volume' and sort_order == 'asc' else 'asc' }}">Average Volume</a></th>
+                    <th><a class="sort" href="?sort=Market Cap&order={{ 'desc' if sort_column == 'Market Cap' and sort_order == 'asc' else 'asc' }}">Market Cap</a></th>
                 </tr>
                 {% for stock in stock_data %}
                 <tr>
                     <td>{{ stock['Stock Symbol'] }}</td>
-                    <td>{{ stock['Suggested Price'] | round(2) }}</td>
-                    <td>{{ stock['Current Price'] | round(2) }}</td>
-                    <td>{{ stock['Gain/Loss (%)'] | round(2) }}</td>
-                    <td>{{ stock['RSI'] | round(2) }}</td>
-                    <td>{{ stock['Short MA'] | round(2) }}</td>
-                    <td>{{ stock['Long MA'] | round(2) }}</td>
-                    <td>{{ stock['MACD'] | round(2) }}</td>
-                    <td>{{ stock['Signal Line'] | round(2) }}</td>
-                    <td>{{ stock['Upper Bollinger Band'] | round(2) }}</td>
-                    <td>{{ stock['Lower Bollinger Band'] | round(2) }}</td>
-                    <td>{{ stock['Volume'] | round(2) }}</td>
-                    <td>{{ stock['Average Volume'] | round(2) }}</td>
-                    <td>{{ stock['Market Cap'] | round(2) }}</td>
+                    <td>{{ stock['Suggested Price'] }}</td>
+                    <td>{{ stock['Current Price'] }}</td>
+                    <td>{{ stock['Gain/Loss (%)'] }}</td>
+                    <td>{{ stock['RSI'] }}</td>
+                    <td>{{ stock['Short MA'] }}</td>
+                    <td>{{ stock['Long MA'] }}</td>
+                    <td>{{ stock['MACD'] }}</td>
+                    <td>{{ stock['Signal Line'] }}</td>
+                    <td>{{ stock['Upper Bollinger Band'] }}</td>
+                    <td>{{ stock['Lower Bollinger Band'] }}</td>
+                    <td>{{ stock['Volume'] }}</td>
+                    <td>{{ stock['Average Volume'] }}</td>
+                    <td>{{ stock['Market Cap'] }}</td>
                 </tr>
                 {% endfor %}
             </table>
         </div>
 
-        <h2>Top 10 Gainers of the Day</h2>
+        <h2>Top 10 Gainers</h2>
         <div class="table-container">
             <table>
                 <tr>
@@ -128,14 +128,14 @@
                 {% for gainer in top_gainers %}
                 <tr>
                     <td>{{ gainer[0] }}</td>
-                    <td>{{ gainer[1] | round(2) }}</td>
-                    <td>{{ gainer[2] | round(2) }}</td>
+                    <td>{{ gainer[1] }}</td>
+                    <td>{{ gainer[2] }}</td>
                 </tr>
                 {% endfor %}
             </table>
         </div>
 
-        <h2>Top 10 Losers of the Day</h2>
+        <h2>Top 10 Losers</h2>
         <div class="table-container">
             <table>
                 <tr>
@@ -146,8 +146,24 @@
                 {% for loser in top_losers %}
                 <tr>
                     <td>{{ loser[0] }}</td>
-                    <td>{{ loser[1] | round(2) }}</td>
-                    <td>{{ loser[2] | round(2) }}</td>
+                    <td>{{ loser[1] }}</td>
+                    <td>{{ loser[2] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <h2>Market Indices & Indicators</h2>
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>Index/Indicator</th>
+                    <th>Current Price</th>
+                </tr>
+                {% for name, info in current_market_data.items() %}
+                <tr>
+                    <td>{{ name }}</td>
+                    <td>{{ info['Current Price'] }}</td>
                 </tr>
                 {% endfor %}
             </table>
