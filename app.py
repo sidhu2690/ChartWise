@@ -63,15 +63,19 @@ def get_stock_data():
         market_cap = ticker.info.get('marketCap', 'N/A')
         
         if current_price is not None:
-            gain_loss = ((current_price - suggested_price) / suggested_price) * 100
-            rsi = calculate_rsi(history)
-            short_ma = calculate_moving_average(history, 20)
-            long_ma = calculate_moving_average(history, 50)
+            gain_loss = round(((current_price - suggested_price) / suggested_price) * 100, 2)
+            rsi = round(calculate_rsi(history), 2)
+            short_ma = round(calculate_moving_average(history, 20), 2)
+            long_ma = round(calculate_moving_average(history, 50), 2)
             macd, signal_line = calculate_macd(history)
+            macd = round(macd, 2)
+            signal_line = round(signal_line, 2)
             upper_band, lower_band = calculate_bollinger_bands(history)
+            upper_band = round(upper_band, 2)
+            lower_band = round(lower_band, 2)
             
             # Calculate daily change percentage
-            daily_change = ((current_price - history['Close'].iloc[-2]) / history['Close'].iloc[-2]) * 100
+            daily_change = round(((current_price - history['Close'].iloc[-2]) / history['Close'].iloc[-2]) * 100, 2)
             daily_changes.append((symbol, current_price, daily_change))
         else:
             gain_loss = None
@@ -85,8 +89,8 @@ def get_stock_data():
         
         data.append({
             'Stock Symbol': symbol,
-            'Suggested Price': suggested_price,
-            'Current Price': current_price,
+            'Suggested Price': round(suggested_price, 2),
+            'Current Price': round(current_price, 2) if current_price is not None else None,
             'Gain/Loss (%)': gain_loss,
             'RSI': rsi,
             'Short MA': short_ma,
@@ -107,6 +111,37 @@ def get_stock_data():
     
     return data, top_gainers, top_losers
 
+def get_indices_data():
+    symbols = {
+        'Nifty 50': '^NSEI',
+        'Sensex': '^BSESN',
+        'India VIX': '^INDIAVIX',
+        'Bank Nifty': '^NSEBANK',
+        'Nifty Midcap 50': '^NSEMDCP50',
+        'Nifty IT': '^CNXIT',
+        'Nifty Pharma': '^CNXPHARMA',
+        'Nifty FMCG': '^CNXFMCG',
+        'Nifty Energy': '^CNXENERGY',
+        'Nifty Auto': '^CNXAUTO',
+        'USD/INR Exchange Rate': 'INR=X',
+        'Crude Oil Prices': 'CL=F',
+        'Gold Prices': 'GC=F',
+        'S&P 500': '^GSPC',
+        'Dow Jones Industrial Average': '^DJI',
+        'NASDAQ Composite': '^IXIC'
+    }
+    
+    data = {}
+    for name, symbol in symbols.items():
+        ticker = yf.Ticker(symbol)
+        history = ticker.history(period='1d')
+        current_price = history['Close'].iloc[-1] if not history.empty else 'N/A'
+        data[name] = {
+            'Current Price': round(current_price, 2) if current_price != 'N/A' else current_price
+        }
+    
+    return data
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     global stocks
@@ -118,6 +153,7 @@ def index():
         return redirect(url_for('index'))
     
     stock_data, top_gainers, top_losers = get_stock_data()
+    current_market_data = get_indices_data()
     
     # Handle sorting
     sort_column = request.args.get('sort', 'Stock Symbol')
@@ -125,7 +161,13 @@ def index():
     reverse = True if sort_order == 'desc' else False
     stock_data = sorted(stock_data, key=lambda x: x.get(sort_column, 0) or 0, reverse=reverse)
     
-    return render_template('index.html', stock_data=stock_data, top_gainers=top_gainers, top_losers=top_losers, sort_column=sort_column, sort_order=sort_order)
+    return render_template('index.html', 
+                           stock_data=stock_data, 
+                           top_gainers=top_gainers, 
+                           top_losers=top_losers, 
+                           sort_column=sort_column, 
+                           sort_order=sort_order,
+                           current_market_data=current_market_data)
 
 if __name__ == '__main__':
     app.run(debug=True)
