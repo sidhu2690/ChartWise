@@ -92,25 +92,31 @@
                     <th><a href="?sort=Signal Line&order={{ 'asc' if sort_column != 'Signal Line' or sort_order == 'desc' else 'desc' }}" class="sort">Signal Line</a></th>
                     <th><a href="?sort=Upper Bollinger Band&order={{ 'asc' if sort_column != 'Upper Bollinger Band' or sort_order == 'desc' else 'desc' }}" class="sort">Upper Bollinger Band</a></th>
                     <th><a href="?sort=Lower Bollinger Band&order={{ 'asc' if sort_column != 'Lower Bollinger Band' or sort_order == 'desc' else 'desc' }}" class="sort">Lower Bollinger Band</a></th>
+                    <th><a href="?sort=Volume&order={{ 'asc' if sort_column != 'Volume' or sort_order == 'desc' else 'desc' }}" class="sort">Daily Volume</a></th>
+                    <th><a href="?sort=Average Volume&order={{ 'asc' if sort_column != 'Average Volume' or sort_order == 'desc' else 'desc' }}" class="sort">Average Volume</a></th>
+                    <th><a href="?sort=Market Cap&order={{ 'asc' if sort_column != 'Market Cap' or sort_order == 'desc' else 'desc' }}" class="sort">Market Cap</a></th>
                 </tr>
                 {% for stock in stock_data %}
                 <tr>
                     <td>{{ stock['Stock Symbol'] }}</td>
-                    <td>{{ "%.2f" % stock['Suggested Price'] if stock['Suggested Price'] is not none else 'N/A' }}</td>
-                    <td>{{ "%.2f" % stock['Current Price'] if stock['Current Price'] is not none else 'N/A' }}</td>
-                    <td>{{ "%.2f" % stock['Gain/Loss (%)'] if stock['Gain/Loss (%)'] is not none else 'N/A' }}</td>
-                    <td>{{ "%.2f" % stock['RSI'] if stock['RSI'] is not none else 'N/A' }}</td>
-                    <td>{{ "%.2f" % stock['Short MA'] if stock['Short MA'] is not none else 'N/A' }}</td>
-                    <td>{{ "%.2f" % stock['Long MA'] if stock['Long MA'] is not none else 'N/A' }}</td>
-                    <td>{{ "%.2f" % stock['MACD'] if stock['MACD'] is not none else 'N/A' }}</td>
-                    <td>{{ "%.2f" % stock['Signal Line'] if stock['Signal Line'] is not none else 'N/A' }}</td>
-                    <td>{{ "%.2f" % stock['Upper Bollinger Band'] if stock['Upper Bollinger Band'] is not none else 'N/A' }}</td>
-                    <td>{{ "%.2f" % stock['Lower Bollinger Band'] if stock['Lower Bollinger Band'] is not none else 'N/A' }}</td>
+                    <td>{{ stock['Suggested Price'] | round(2) }}</td>
+                    <td>{{ stock['Current Price'] | round(2) }}</td>
+                    <td>{{ stock['Gain/Loss (%)'] | round(2) }}</td>
+                    <td>{{ stock['RSI'] | round(2) }}</td>
+                    <td>{{ stock['Short MA'] | round(2) }}</td>
+                    <td>{{ stock['Long MA'] | round(2) }}</td>
+                    <td>{{ stock['MACD'] | round(2) }}</td>
+                    <td>{{ stock['Signal Line'] | round(2) }}</td>
+                    <td>{{ stock['Upper Bollinger Band'] | round(2) }}</td>
+                    <td>{{ stock['Lower Bollinger Band'] | round(2) }}</td>
+                    <td>{{ stock['Volume'] | round(2) }}</td>
+                    <td>{{ stock['Average Volume'] | round(2) }}</td>
+                    <td>{{ stock['Market Cap'] | round(2) }}</td>
                 </tr>
                 {% endfor %}
             </table>
         </div>
-        
+
         <h2>Top 10 Gainers of the Day</h2>
         <div class="table-container">
             <table>
@@ -122,13 +128,13 @@
                 {% for gainer in top_gainers %}
                 <tr>
                     <td>{{ gainer[0] }}</td>
-                    <td>{{ "%.2f" % gainer[1] if gainer[1] is not none else 'N/A' }}</td>
-                    <td>{{ "%.2f" % gainer[2] if gainer[2] is not none else 'N/A' }}</td>
+                    <td>{{ gainer[1] | round(2) }}</td>
+                    <td>{{ gainer[2] | round(2) }}</td>
                 </tr>
                 {% endfor %}
             </table>
         </div>
-        
+
         <h2>Top 10 Losers of the Day</h2>
         <div class="table-container">
             <table>
@@ -140,8 +146,8 @@
                 {% for loser in top_losers %}
                 <tr>
                     <td>{{ loser[0] }}</td>
-                    <td>{{ "%.2f" % loser[1] if loser[1] is not none else 'N/A' }}</td>
-                    <td>{{ "%.2f" % loser[2] if loser[2] is not none else 'N/A' }}</td>
+                    <td>{{ loser[1] | round(2) }}</td>
+                    <td>{{ loser[2] | round(2) }}</td>
                 </tr>
                 {% endfor %}
             </table>
